@@ -16,11 +16,10 @@ export const siteConfig = {
      * 1. Copia la fotografía dentro de `public/images/` (ej. `public/images/nuestra-foto.jpg`)
      * 2. Cambia `imageSrc` a `'/images/nuestra-foto.jpg'` y cambia `isTemporaryReference` a `false`.
      */
-    imageSrc: '/images/hero-reference-temporal.jpg',
-    imageAlt:
-      'Escena nocturna invernal de referencia temporal con luces cálidas desenfocadas',
-    isTemporaryReference: true,
-    referenceNote: 'Fotografía de referencia temporal',
+    imageSrc: '/images/Foto1.jpg',
+    imageAlt: 'María y Ángel — Una Navidad juntos',
+    isTemporaryReference: false,
+    referenceNote: '',
   },
   privateAccess: {
     title: 'Esta historia es solamente nuestra',
