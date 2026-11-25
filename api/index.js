@@ -1976,11 +1976,7 @@ if (process.env.NODE_ENV !== "test" && !process.env.VERCEL) {
     );
   });
 }
-
-// api/index.ts
-async function handler(req, res) {
-  await handleAppRequest(req, res);
-}
 export {
-  handler as default
+  handleAppRequest,
+  server
 };

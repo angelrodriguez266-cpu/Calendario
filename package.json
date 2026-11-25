@@ -9,7 +9,7 @@
   },
   "scripts": {
     "dev": "node --watch --env-file-if-exists=.env.local src/server/server.ts",
-    "build": "esbuild api/index.ts --bundle --platform=node --target=node20 --format=esm --outfile=api/index.js",
+    "build": "esbuild src/server/server.ts --bundle --platform=node --target=node20 --format=esm --outfile=api/index.js",
     "start": "node --env-file-if-exists=.env.local src/server/server.ts",
     "hash-password": "node scripts/hash-password.mjs"
   },
