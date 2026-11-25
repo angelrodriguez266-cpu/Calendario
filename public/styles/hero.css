@@ -1,0 +1,480 @@
+.hero-section {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  background-color: var(--color-negro-calido);
+  color: var(--color-marfil);
+  isolation: isolate;
+}
+
+/* CAPA 1 — Fondo principal con efecto Ken Burns cinematográfico + parallax */
+.hero-section__backdrop-wrap {
+  position: absolute;
+  inset: -4%;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.hero-section__backdrop-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 68% center;
+  filter: saturate(0.96) contrast(1.03);
+  transform-origin: 62% 45%;
+  animation: heroKenBurns 26s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+@keyframes heroKenBurns {
+  0% {
+    transform: scale(1.02) translate3d(0%, 0%, 0);
+  }
+  50% {
+    transform: scale(1.075) translate3d(-1.1%, -0.8%, 0);
+  }
+  100% {
+    transform: scale(1.105) translate3d(0.6%, -1.4%, 0);
+  }
+}
+
+/* CAPA 2 — Overlay cinematográfico e iluminación ambiental cálida */
+.hero-section__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    linear-gradient(
+      96deg,
+      rgba(41, 39, 36, 0.90) 0%,
+      rgba(38, 59, 50, 0.72) 36%,
+      rgba(41, 39, 36, 0.42) 64%,
+      rgba(41, 39, 36, 0.62) 100%
+    ),
+    radial-gradient(
+      circle at 50% 100%,
+      rgba(41, 39, 36, 0.84) 0%,
+      transparent 58%
+    );
+}
+
+.hero-section__ambient-light {
+  position: absolute;
+  inset: -10%;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 36% 32% at 24% 34%, rgba(198, 164, 111, 0.16) 0%, transparent 72%),
+    radial-gradient(ellipse 32% 30% at 76% 42%, rgba(198, 164, 111, 0.14) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 34% at 48% 72%, rgba(120, 52, 65, 0.14) 0%, transparent 72%);
+  animation: heroAmbientBreathe 12s ease-in-out infinite alternate;
+  will-change: opacity, transform;
+}
+
+@keyframes heroAmbientBreathe {
+  0% {
+    opacity: 0.58;
+    transform: scale(0.98) translate3d(-1%, 0%, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1.04) translate3d(1.2%, -1%, 0);
+  }
+}
+
+/* CAPA 5 — Contenido editorial con secuencia coreografiada de 6 pasos */
+.hero-section__container {
+  position: relative;
+  z-index: 4;
+  width: min(1200px, 100%);
+  margin-inline: auto;
+  padding: clamp(3.5rem, 7vh, 5.5rem) clamp(1.4rem, 5vw, 4.5rem);
+  display: flex;
+  align-items: center;
+}
+
+.hero-section__editorial {
+  position: relative;
+  max-width: 560px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Paso 1: Pequeño destello luminoso inicial */
+.hero-section__opening-gleam {
+  position: relative;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.25rem;
+  color: var(--color-oro-champan);
+  opacity: 0;
+  animation: openingGleamBloom 1.4s var(--ease-editorial) 80ms forwards;
+}
+
+.hero-section__opening-gleam::before {
+  content: '';
+  position: absolute;
+  inset: -14px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(243, 235, 221, 0.52) 0%,
+    rgba(198, 164, 111, 0.22) 45%,
+    transparent 72%
+  );
+  animation: openingHaloPulse 4.6s ease-in-out 1.2s infinite alternate;
+}
+
+@keyframes openingGleamBloom {
+  0% {
+    opacity: 0;
+    transform: scale(0.35) rotate(-25deg);
+  }
+  45% {
+    opacity: 1;
+    transform: scale(1.18) rotate(0deg);
+  }
+  100% {
+    opacity: 0.92;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+@keyframes openingHaloPulse {
+  0% {
+    opacity: 0.4;
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 0.85;
+    transform: scale(1.15);
+  }
+}
+
+/* Paso 2: Se revela «Una historia de» */
+.hero-section__clapper-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.42rem;
+  margin-bottom: 0.5rem;
+  opacity: 0;
+  animation: eyebrowUnveil 680ms var(--ease-editorial) 340ms forwards;
+}
+
+.hero-section__clapper {
+  color: var(--color-marfil);
+  filter: drop-shadow(0 2px 8px rgba(41, 39, 36, 0.55));
+}
+
+.hero-section__eyebrow {
+  font-family: var(--font-sans);
+  font-size: clamp(0.84rem, 1.3vw, 0.96rem);
+  font-weight: 400;
+  letter-spacing: 0.16em;
+  color: var(--marfil-86);
+}
+
+@keyframes eyebrowUnveil {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 12px, 0);
+    letter-spacing: 0.24em;
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+    letter-spacing: 0.16em;
+  }
+}
+
+/* Paso 3: Aparece «María y Ángel» con máscara editorial */
+.hero-section__title {
+  font-family: var(--font-serif);
+  font-optical-sizing: none;
+  font-variation-settings: 'opsz' 28;
+  font-size: clamp(2.65rem, 6.2vw, 4.65rem);
+  font-weight: 500;
+  line-height: 1.06;
+  letter-spacing: -0.01em;
+  color: var(--color-marfil);
+  text-shadow: 0 6px 28px rgba(41, 39, 36, 0.65);
+  margin-bottom: 0.35rem;
+  opacity: 0;
+  clip-path: inset(0 0 100% 0);
+  animation: titleMaskReveal 880ms var(--ease-editorial) 640ms forwards;
+}
+
+@keyframes titleMaskReveal {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 22px, 0);
+    clip-path: inset(0 0 100% 0);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+    clip-path: inset(0 0 0% 0);
+  }
+}
+
+/* Paso 4: Subtítulo manuscrito con animación de escritura + trazado de corazón SVG */
+.hero-section__subtitle {
+  font-family: var(--font-script);
+  font-size: clamp(2.15rem, 4.6vw, 3.35rem);
+  font-weight: 400;
+  line-height: 1.15;
+  color: var(--color-oro-champan);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  text-shadow: 0 3px 18px rgba(41, 39, 36, 0.65);
+  margin-bottom: 1.1rem;
+}
+
+.hero-section__subtitle-text {
+  display: inline-block;
+  padding-inline: 0.12em;
+  opacity: 0;
+  clip-path: inset(0 100% 0 0);
+  animation: scriptWriteReveal 1150ms cubic-bezier(0.35, 0, 0.25, 1) 1040ms forwards;
+}
+
+@keyframes scriptWriteReveal {
+  0% {
+    opacity: 0.35;
+    clip-path: inset(0 100% 0 0);
+  }
+  100% {
+    opacity: 1;
+    clip-path: inset(0 0% 0 0);
+  }
+}
+
+.hero-section__subtitle-heart {
+  color: var(--color-oro-champan);
+  transform: translateY(2px);
+  flex-shrink: 0;
+}
+
+.hero-section__subtitle-heart .heart-draw-path {
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  animation: drawHeartStroke 750ms var(--ease-editorial) 1820ms forwards;
+}
+
+@keyframes drawHeartStroke {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Paso 5: Separador y frase secundaria progresivos */
+.hero-section__divider {
+  margin-bottom: 1.25rem;
+  opacity: 0;
+  transform: scaleX(0.2);
+  animation: dividerExpand 720ms var(--ease-editorial) 1680ms forwards;
+}
+
+@keyframes dividerExpand {
+  to {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+}
+
+.hero-section__phrase {
+  font-family: var(--font-sans);
+  font-size: clamp(0.96rem, 1.55vw, 1.1rem);
+  font-weight: 300;
+  line-height: 1.65;
+  color: var(--marfil-96);
+  max-width: 38ch;
+  margin-bottom: 2.05rem;
+  text-shadow: 0 2px 12px rgba(41, 39, 36, 0.7);
+  opacity: 0;
+  animation: heroFadeRise 760ms var(--ease-editorial) 1840ms forwards;
+}
+
+/* Paso 6: Botón principal con entrada suave, destello automático y microinteracciones */
+.hero-section__cta {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  min-height: 54px;
+  padding: 0.85rem 2.15rem;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(
+    120deg,
+    rgba(120, 52, 65, 0.86) 0%,
+    rgba(92, 34, 45, 0.92) 50%,
+    rgba(120, 52, 65, 0.88) 100%
+  );
+  background-size: 200% 100%;
+  background-position: 0% 50%;
+  border: 1px solid var(--oro-champan-85);
+  color: var(--color-marfil);
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  font-weight: 400;
+  letter-spacing: 0.03em;
+  box-shadow:
+    0 10px 30px rgba(41, 39, 36, 0.50),
+    inset 0 1px 0 rgba(243, 235, 221, 0.18);
+  overflow: hidden;
+  opacity: 0;
+  animation: heroFadeRise 740ms var(--ease-editorial) 2080ms forwards;
+  transition:
+    transform var(--duration-normal) var(--ease-editorial),
+    box-shadow var(--duration-normal) var(--ease-editorial),
+    border-color var(--duration-fast) var(--ease-delicate),
+    background-position 600ms var(--ease-editorial);
+}
+
+.hero-section__cta::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 65%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(243, 235, 221, 0.34),
+    rgba(198, 164, 111, 0.42),
+    transparent
+  );
+  transform: skewX(-22deg);
+  animation: ctaEntranceGlint 1.3s var(--ease-editorial) 2520ms 1;
+  transition: left var(--duration-special) var(--ease-editorial);
+}
+
+@keyframes ctaEntranceGlint {
+  from {
+    left: -120%;
+  }
+  to {
+    left: 155%;
+  }
+}
+
+.hero-section__cta:hover {
+  transform: translateY(-2px) scale(1.03);
+  background-position: 100% 50%;
+  border-color: var(--color-oro-champan);
+  box-shadow:
+    0 16px 40px rgba(120, 52, 65, 0.52),
+    0 0 26px rgba(198, 164, 111, 0.32),
+    inset 0 1px 0 rgba(243, 235, 221, 0.28);
+}
+
+.hero-section__cta:hover::before {
+  left: 155%;
+}
+
+.hero-section__cta:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.hero-section__cta-arrow {
+  display: inline-flex;
+  transition: transform var(--duration-normal) var(--ease-editorial);
+}
+
+.hero-section__cta:hover .hero-section__cta-arrow {
+  transform: translateX(6px);
+}
+
+.hero-section__reference-note {
+  position: absolute;
+  bottom: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 4;
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  color: rgba(243, 235, 221, 0.45);
+  text-align: center;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+@keyframes heroFadeRise {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 16px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-section__backdrop-img {
+    animation: none;
+    transform: scale(1.01);
+  }
+
+  .hero-section__opening-gleam,
+  .hero-section__clapper-row,
+  .hero-section__title,
+  .hero-section__subtitle-text,
+  .hero-section__divider,
+  .hero-section__phrase,
+  .hero-section__cta {
+    opacity: 1 !important;
+    clip-path: none !important;
+    transform: none !important;
+  }
+
+  .hero-section__subtitle-heart .heart-draw-path {
+    stroke-dashoffset: 0 !important;
+  }
+}
+
+@media (max-width: 860px) {
+  .hero-section__backdrop-img {
+    object-position: 67% 32%;
+  }
+
+  .hero-section__overlay {
+    background:
+      linear-gradient(
+        180deg,
+        rgba(41, 39, 36, 0.72) 0%,
+        rgba(38, 59, 50, 0.56) 44%,
+        rgba(41, 39, 36, 0.88) 88%,
+        rgba(41, 39, 36, 0.95) 100%
+      );
+  }
+
+  .hero-section__container {
+    justify-content: center;
+    padding-top: 4.5rem;
+    padding-bottom: 5rem;
+  }
+
+  .hero-section__editorial {
+    max-width: 440px;
+    margin-inline: auto;
+  }
+
+  .hero-section__cta {
+    width: min(100%, 320px);
+  }
+}

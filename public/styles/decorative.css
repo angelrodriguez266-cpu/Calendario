@@ -1,0 +1,213 @@
+.star-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.85rem;
+  width: min(260px, 72vw);
+  margin-inline: auto;
+  user-select: none;
+  pointer-events: none;
+}
+
+.star-divider__line-left {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, var(--oro-champan-85) 100%);
+}
+
+.star-divider__line-right {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, var(--oro-champan-85) 0%, transparent 100%);
+}
+
+.star-divider__gem {
+  color: var(--color-oro-champan);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 0 6px rgba(198, 164, 111, 0.35));
+  animation: subtleStarTwinkle 4.8s var(--ease-delicate) infinite;
+}
+
+@keyframes subtleStarTwinkle {
+  0%, 100% {
+    opacity: 0.82;
+    transform: scale(0.96);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.06);
+  }
+}
+
+.ornamental-frame {
+  position: absolute;
+  inset: clamp(14px, 2.6vw, 32px);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.ornamental-frame__svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.ornamental-frame__glint {
+  stroke-dasharray: 8 92;
+  stroke-dashoffset: 100;
+  animation: frameEdgeShimmer 12s linear infinite;
+}
+
+@keyframes frameEdgeShimmer {
+  0% {
+    stroke-dashoffset: 100;
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.72;
+  }
+  90% {
+    opacity: 0.72;
+  }
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 0;
+  }
+}
+
+.fairy-lights-pulse {
+  animation: fairyTwinkle 4.4s ease-in-out infinite alternate;
+}
+
+@keyframes fairyTwinkle {
+  0% {
+    opacity: 0.65;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.atmosphere-layer {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.bokeh-orb {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(243, 235, 221, 0.42) 0%,
+    rgba(198, 164, 111, 0.26) 40%,
+    rgba(198, 164, 111, 0) 72%
+  );
+  filter: blur(8px);
+  animation: bokehFloat 11s ease-in-out infinite alternate;
+}
+
+@keyframes bokehFloat {
+  0% {
+    transform: translate3d(0, 0, 0) scale(0.95);
+    opacity: 0.45;
+  }
+  100% {
+    transform: translate3d(8px, -12px, 0) scale(1.08);
+    opacity: 0.82;
+  }
+}
+
+.snowflake {
+  position: absolute;
+  top: -12px;
+  border-radius: 50%;
+  background-color: var(--color-marfil);
+  box-shadow: 0 0 4px rgba(243, 235, 221, 0.4);
+  animation-name: gentleSnowfall;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+@keyframes gentleSnowfall {
+  0% {
+    transform: translate3d(0, -2vh, 0);
+    opacity: 0;
+  }
+  15% {
+    opacity: var(--flake-opacity, 0.38);
+  }
+  85% {
+    opacity: var(--flake-opacity, 0.38);
+  }
+  100% {
+    transform: translate3d(var(--flake-drift, 18px), 104vh, 0);
+    opacity: 0;
+  }
+}
+
+.pine-corner {
+  position: absolute;
+  pointer-events: none;
+  z-index: 3;
+  user-select: none;
+}
+
+.pine-corner--bottom-left {
+  bottom: -8px;
+  left: -10px;
+  width: clamp(130px, 18vw, 240px);
+}
+
+.pine-corner--bottom-right {
+  bottom: -8px;
+  right: -10px;
+  width: clamp(130px, 18vw, 240px);
+  transform: scaleX(-1);
+}
+
+.pine-corner--top-left {
+  top: -6px;
+  left: -8px;
+  width: clamp(115px, 16vw, 220px);
+}
+
+.pine-corner--top-right {
+  top: -6px;
+  right: -8px;
+  width: clamp(115px, 16vw, 220px);
+  transform: scaleX(-1);
+}
+
+.corner-velvet-ribbon {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: clamp(130px, 20vw, 260px);
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0.92;
+}
+
+@media (max-width: 640px) {
+  .pine-corner--top-left,
+  .pine-corner--top-right {
+    width: 100px;
+    opacity: 0.9;
+  }
+
+  .pine-corner--bottom-left,
+  .pine-corner--bottom-right {
+    width: 112px;
+    opacity: 0.88;
+  }
+
+  .corner-velvet-ribbon {
+    width: 115px;
+    opacity: 0.78;
+  }
+}

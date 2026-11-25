@@ -1,0 +1,15 @@
+{
+  "name": "maria-y-angel-navidad-juntos",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "María y Ángel: una Navidad juntos — Calendario de Adviento digital privado (Diciembre 2026)",
+  "engines": {
+    "node": ">=22.6.0"
+  },
+  "scripts": {
+    "dev": "node --watch --env-file-if-exists=.env.local src/server/server.ts",
+    "start": "node --env-file-if-exists=.env.local src/server/server.ts",
+    "hash-password": "node scripts/hash-password.mjs"
+  }
+}

@@ -1,0 +1,279 @@
+/* =========================================================================
+   MOTION GRAPHICS GLOBAL — CAPAS, PARALLAX, TRANSICIONES DE CÁMARA Y BRILLOS
+   ========================================================================= */
+
+/* Pausa global instantánea cuando la pestaña no es visible */
+html.motion-paused *,
+html.motion-paused *::before,
+html.motion-paused *::after {
+  animation-play-state: paused !important;
+}
+
+/* Halo cálido sutil que acompaña al cursor en escritorio */
+.pointer-light-aura {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 360px;
+  height: 360px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(198, 164, 111, 0.16) 0%,
+    rgba(193, 140, 131, 0.06) 36%,
+    transparent 70%
+  );
+  pointer-events: none;
+  z-index: 35;
+  opacity: 0;
+  will-change: transform, opacity;
+  transition: opacity var(--duration-normal) var(--ease-delicate);
+}
+
+.pointer-light-aura--visible {
+  opacity: 1;
+}
+
+/* Transición cinematográfica de cámara entre secciones */
+.cinema-transition-veil {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(198, 164, 111, 0.24) 0%,
+    rgba(41, 39, 36, 0.94) 72%
+  );
+  transition: opacity 340ms var(--ease-editorial);
+}
+
+.cinema-transition-veil[data-tone='ivory'] {
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(243, 235, 221, 0.96) 0%,
+    rgba(120, 52, 65, 0.78) 100%
+  );
+}
+
+.cinema-transition-veil--enter {
+  opacity: 1;
+}
+
+.cinema-transition-veil--exit {
+  opacity: 0;
+  transition: opacity 460ms var(--ease-editorial);
+}
+
+#app-root {
+  transition: transform 360ms var(--ease-editorial), opacity 340ms var(--ease-delicate);
+}
+
+#app-root.cinema-camera-push {
+  will-change: transform, opacity;
+  transform: scale(1.028);
+  opacity: 0.78;
+}
+
+#app-root.cinema-camera-arrive {
+  will-change: transform, opacity;
+  animation: cameraArrive 520ms var(--ease-editorial);
+}
+
+@keyframes cameraArrive {
+  from {
+    transform: scale(0.985);
+    opacity: 0.85;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* =========================================================================
+   ARQUITECTURA DE 5 CAPAS DE PROFUNDIDAD
+   ========================================================================= */
+
+.motion-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.motion-layer--backdrop {
+  z-index: 0;
+}
+
+.motion-layer--lighting {
+  z-index: 1;
+}
+
+.motion-layer--particles {
+  z-index: 2;
+}
+
+.motion-layer--decorations {
+  z-index: 3;
+}
+
+.motion-particle-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Envoltorio GPU-friendly para parallax sin sobreescribir animaciones internas */
+.parallax-wrap {
+  transform: translate3d(var(--parallax-x, 0px), var(--parallax-y, 0px), 0);
+  will-change: transform;
+}
+
+/* Iluminación ambiental viva para superficies marfil (evita fondo estático) */
+.ambient-paper-light {
+  position: absolute;
+  inset: -12%;
+  background:
+    radial-gradient(ellipse 46% 36% at 18% 16%, rgba(198, 164, 111, 0.20) 0%, transparent 70%),
+    radial-gradient(ellipse 42% 34% at 84% 20%, rgba(193, 140, 131, 0.14) 0%, transparent 68%),
+    radial-gradient(ellipse 52% 40% at 50% 88%, rgba(198, 164, 111, 0.15) 0%, transparent 72%);
+  animation: paperCandleBreathe 16s ease-in-out infinite alternate;
+  will-change: transform, opacity;
+}
+
+@keyframes paperCandleBreathe {
+  0% {
+    transform: translate3d(-1.5%, -1%, 0) scale(1);
+    opacity: 0.72;
+  }
+  50% {
+    transform: translate3d(1.2%, 1.4%, 0) scale(1.04);
+    opacity: 1;
+  }
+  100% {
+    transform: translate3d(-0.8%, 0.6%, 0) scale(1.01);
+    opacity: 0.82;
+  }
+}
+
+/* Luces cálidas en los bordes superiores del calendario */
+.corner-warm-glow {
+  position: absolute;
+  width: clamp(190px, 26vw, 340px);
+  height: clamp(160px, 22vw, 270px);
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(198, 164, 111, 0.30) 0%,
+    rgba(243, 235, 221, 0.14) 42%,
+    transparent 74%
+  );
+  animation: cornerGlowPulse 7.5s ease-in-out infinite alternate;
+  will-change: opacity, transform;
+}
+
+.corner-warm-glow--left {
+  top: -40px;
+  left: -30px;
+}
+
+.corner-warm-glow--right {
+  top: -40px;
+  right: -30px;
+  animation-delay: -3.6s;
+}
+
+@keyframes cornerGlowPulse {
+  0% {
+    opacity: 0.52;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 0.94;
+    transform: scale(1.07);
+  }
+}
+
+/* =========================================================================
+   MOVIMIENTO ORGÁNICO DE DECORACIONES (VIENTO EN PINO Y CINTAS DE TERCIOPELO)
+   ========================================================================= */
+
+.pine-sway {
+  transform-origin: 12% 85%;
+  animation: pineWindSway 8.5s ease-in-out infinite;
+  will-change: transform;
+}
+
+.pine-sway--top {
+  transform-origin: 12% 15%;
+  animation-duration: 9.2s;
+  animation-delay: -2.4s;
+}
+
+.pine-sway--right {
+  animation-duration: 9.8s;
+  animation-delay: -4.1s;
+}
+
+@keyframes pineWindSway {
+  0%, 100% {
+    transform: rotate(0deg) translate3d(0, 0, 0);
+  }
+  35% {
+    transform: rotate(1.6deg) translate3d(2px, -1px, 0);
+  }
+  70% {
+    transform: rotate(-1.1deg) translate3d(-1px, 1px, 0);
+  }
+}
+
+.velvet-oscillate {
+  animation: velvetFloatWave 7.4s ease-in-out infinite;
+  will-change: transform;
+}
+
+.velvet-oscillate--delayed {
+  animation-delay: -3.2s;
+  animation-duration: 8.1s;
+}
+
+@keyframes velvetFloatWave {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  50% {
+    transform: translate3d(0, -4px, 0) rotate(1.3deg);
+  }
+}
+
+/* =========================================================================
+   REVELADO POR SCROLL (INTERSECTION OBSERVER)
+   ========================================================================= */
+
+[data-reveal] {
+  opacity: 0;
+  transform: translate3d(0, 18px, 0);
+  transition:
+    opacity 540ms var(--ease-editorial),
+    transform 580ms var(--ease-editorial);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+[data-reveal].is-revealed {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pointer-light-aura,
+  .cinema-transition-veil {
+    display: none !important;
+  }
+
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}

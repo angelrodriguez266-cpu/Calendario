@@ -1,0 +1,593 @@
+.advent-calendar__grid-item {
+  list-style: none;
+}
+
+.calendar-day {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1.08 / 1;
+  border-radius: var(--radius-sm);
+  padding: 0.65rem 0.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.32rem;
+  background-color: var(--color-marfil);
+  background-image:
+    linear-gradient(180deg, rgba(255, 253, 249, 0.62) 0%, rgba(235, 223, 206, 0.44) 100%),
+    var(--paper-grain-svg);
+  border: 1px solid rgba(198, 164, 111, 0.36);
+  box-shadow: var(--shadow-card);
+  color: var(--color-negro-calido);
+  user-select: none;
+  overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+  will-change: transform, opacity;
+  transition:
+    transform var(--duration-normal) var(--ease-editorial),
+    box-shadow var(--duration-normal) var(--ease-editorial),
+    border-color var(--duration-fast) var(--ease-delicate),
+    opacity var(--duration-normal) var(--ease-delicate);
+}
+
+/* Entrada escalonada tarjeta por tarjeta (controlada por IntersectionObserver) */
+.advent-calendar__grid-item[data-reveal] .calendar-day__number,
+.advent-calendar__grid-item[data-reveal] .calendar-day__icon {
+  opacity: 0;
+  transform: translate3d(0, 8px, 0);
+  transition:
+    opacity 420ms var(--ease-editorial),
+    transform 460ms var(--ease-editorial);
+}
+
+.advent-calendar__grid-item[data-reveal] .calendar-day__number {
+  transition-delay: calc(var(--reveal-delay, 0ms) + 70ms);
+}
+
+/* Los íconos aparecen inmediatamente después de cada número */
+.advent-calendar__grid-item[data-reveal] .calendar-day__icon {
+  transition-delay: calc(var(--reveal-delay, 0ms) + 190ms);
+}
+
+.advent-calendar__grid-item.is-revealed .calendar-day__number,
+.advent-calendar__grid-item.is-revealed .calendar-day__icon {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+/* Brillo radial sutil en tarjetas interactivas */
+.calendar-day--interactive::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at 50% 25%,
+    rgba(198, 164, 111, 0.28) 0%,
+    rgba(120, 52, 65, 0.08) 46%,
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity var(--duration-normal) var(--ease-delicate);
+  pointer-events: none;
+}
+
+.calendar-day--interactive:hover {
+  transform: translateY(-5px) scale(1.03);
+  box-shadow:
+    var(--shadow-card-hover),
+    0 0 18px rgba(120, 52, 65, 0.14);
+  border-color: var(--color-borgona);
+}
+
+.calendar-day--interactive:hover::after {
+  opacity: 1;
+}
+
+/* Pequeña compresión táctil al pulsar */
+.calendar-day--interactive:active {
+  transform: translateY(-1px) scale(0.955);
+  transition-duration: 120ms;
+}
+
+/* Animación de apertura al seleccionar un día desbloqueado */
+.calendar-day--opening {
+  animation: cardOpenReveal 420ms var(--ease-editorial);
+}
+
+@keyframes cardOpenReveal {
+  0% {
+    transform: scale(0.955);
+  }
+  45% {
+    transform: translateY(-4px) scale(1.06);
+    box-shadow:
+      0 14px 32px rgba(120, 52, 65, 0.30),
+      0 0 26px rgba(198, 164, 111, 0.58);
+  }
+  100% {
+    transform: translateY(-2px) scale(1.02);
+  }
+}
+
+/* =========================================================================
+   1. DÍAS FUTUROS (BLOQUEADOS — VIVOS PERO NO ABRIBLES)
+   ========================================================================= */
+
+.calendar-day--locked {
+  opacity: 0.78;
+  cursor: pointer;
+  border-color: rgba(198, 164, 111, 0.30);
+  box-shadow: 0 2px 8px rgba(41, 39, 36, 0.05);
+}
+
+.calendar-day--locked:hover {
+  border-color: rgba(198, 164, 111, 0.55);
+  box-shadow: 0 4px 12px rgba(41, 39, 36, 0.08);
+}
+
+.calendar-day--locked:active {
+  transform: scale(0.975);
+}
+
+/* Pequeña vibración cuando María intenta abrir un día futuro */
+.calendar-day--locked-nudge {
+  animation: lockedCardVibrate 380ms var(--ease-delicate);
+  border-color: var(--color-rosa-antiguo);
+}
+
+@keyframes lockedCardVibrate {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-4px) rotate(-0.8deg);
+  }
+  42% {
+    transform: translateX(4px) rotate(0.8deg);
+  }
+  64% {
+    transform: translateX(-2.5px) rotate(-0.4deg);
+  }
+  84% {
+    transform: translateX(1.5px) rotate(0.2deg);
+  }
+}
+
+/* Brillo muy sutil en el candado */
+.calendar-day__icon--locked {
+  color: var(--negro-calido-80);
+  animation: padlockSubtleGlint 6.5s ease-in-out infinite;
+  animation-delay: var(--glint-delay, 0s);
+}
+
+@keyframes padlockSubtleGlint {
+  0%, 76%, 100% {
+    opacity: 0.78;
+    filter: none;
+  }
+  88% {
+    opacity: 1;
+    filter: drop-shadow(0 0 4px rgba(198, 164, 111, 0.55));
+  }
+}
+
+/* =========================================================================
+   2. DÍA ACTUAL (DISPONIBLE HOY — AURA, BORDE ANIMADO Y PARTÍCULA DORADA)
+   ========================================================================= */
+
+.calendar-day--today {
+  background-color: var(--color-borgona);
+  background-image:
+    radial-gradient(circle at 50% 18%, rgba(198, 164, 111, 0.28) 0%, transparent 65%),
+    linear-gradient(155deg, #8a3c4b 0%, #783441 55%, #5c232e 100%),
+    var(--paper-grain-svg);
+  border: 2px solid var(--color-borgona);
+  outline: 1px solid rgba(198, 164, 111, 0.68);
+  outline-offset: -5px;
+  color: var(--color-marfil);
+  box-shadow: var(--shadow-card-today);
+  animation: todayAmbientGlow 4.4s ease-in-out infinite alternate;
+}
+
+/* Destello elegante que recorre el borde del día actual */
+.calendar-day--today::before {
+  content: '';
+  position: absolute;
+  top: -20%;
+  left: -130%;
+  width: 75%;
+  height: 140%;
+  background: linear-gradient(
+    110deg,
+    transparent 20%,
+    rgba(243, 235, 221, 0.16) 46%,
+    rgba(198, 164, 111, 0.34) 52%,
+    transparent 80%
+  );
+  transform: rotate(14deg);
+  animation: todayBorderSheen 5.8s var(--ease-editorial) infinite;
+  pointer-events: none;
+}
+
+@keyframes todayAmbientGlow {
+  0% {
+    box-shadow:
+      0 10px 26px rgba(120, 52, 65, 0.30),
+      0 0 12px rgba(198, 164, 111, 0.24);
+  }
+  100% {
+    box-shadow:
+      0 14px 34px rgba(120, 52, 65, 0.42),
+      0 0 26px rgba(198, 164, 111, 0.46);
+  }
+}
+
+@keyframes todayBorderSheen {
+  0%, 58% {
+    left: -130%;
+    opacity: 0;
+  }
+  68% {
+    opacity: 1;
+  }
+  88% {
+    left: 145%;
+    opacity: 1;
+  }
+  100% {
+    left: 145%;
+    opacity: 0;
+  }
+}
+
+.calendar-day--today:hover {
+  border-color: var(--color-oro-champan);
+  transform: translateY(-6px) scale(1.035);
+}
+
+/* Pequeña partícula dorada flotante dentro del día actual */
+.calendar-day__gold-mote {
+  position: absolute;
+  top: 10px;
+  left: 11px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: var(--color-oro-champan);
+  box-shadow: 0 0 8px rgba(198, 164, 111, 0.9);
+  animation: goldMoteDrift 4.8s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes goldMoteDrift {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) scale(0.85);
+    opacity: 0.65;
+  }
+  50% {
+    transform: translate3d(4px, -4px, 0) scale(1.25);
+    opacity: 1;
+  }
+}
+
+/* Movimiento lento y romántico del corazón del día actual */
+.calendar-day__icon--today {
+  color: var(--color-marfil);
+  animation: todayHeartBreathe 3.4s ease-in-out infinite;
+}
+
+@keyframes todayHeartBreathe {
+  0%, 100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 4px rgba(198, 164, 111, 0.3));
+  }
+  50% {
+    transform: scale(1.13);
+    filter: drop-shadow(0 0 10px rgba(198, 164, 111, 0.65));
+  }
+}
+
+/* =========================================================================
+   3. DÍAS ANTERIORES DESBLOQUEADOS
+   ========================================================================= */
+
+.calendar-day--unlocked {
+  opacity: 1;
+  border-color: rgba(198, 164, 111, 0.55);
+}
+
+/* =========================================================================
+   4. DÍA 25 — NAVIDAD (DESTELLOS DORADOS Y AMBIENTE NAVIDEÑO)
+   ========================================================================= */
+
+.calendar-day--christmas {
+  border-color: rgba(198, 164, 111, 0.85);
+  background-image:
+    radial-gradient(circle at 50% 20%, rgba(198, 164, 111, 0.22) 0%, transparent 64%),
+    linear-gradient(180deg, rgba(255, 253, 249, 0.66) 0%, rgba(235, 223, 206, 0.44) 100%),
+    var(--paper-grain-svg);
+  box-shadow:
+    var(--shadow-card),
+    inset 0 0 0 1px rgba(198, 164, 111, 0.40),
+    0 0 14px rgba(198, 164, 111, 0.16);
+}
+
+.calendar-day--christmas.calendar-day--locked {
+  opacity: 0.88;
+}
+
+.calendar-day__christmas-spark {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  color: var(--color-oro-champan);
+  pointer-events: none;
+  animation: christmasTwinkle 3.8s ease-in-out infinite;
+}
+
+.calendar-day__christmas-spark--a {
+  bottom: 9px;
+  left: 9px;
+}
+
+.calendar-day__christmas-spark--b {
+  bottom: 11px;
+  right: 10px;
+  animation-delay: -1.9s;
+}
+
+@keyframes christmasTwinkle {
+  0%, 100% {
+    opacity: 0.35;
+    transform: scale(0.75) rotate(0deg);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.18) rotate(22deg);
+  }
+}
+
+/* =========================================================================
+   5. DÍA 31 — CIERRE DEL CALENDARIO (BRILLO FESTIVO Y CONSTELACIÓN)
+   ========================================================================= */
+
+.calendar-day--finale {
+  border-color: rgba(38, 59, 50, 0.48);
+  background-image:
+    radial-gradient(circle at 50% 82%, rgba(198, 164, 111, 0.24) 0%, transparent 62%),
+    linear-gradient(165deg, rgba(255, 253, 249, 0.68) 0%, rgba(233, 222, 206, 0.50) 100%),
+    var(--paper-grain-svg);
+  box-shadow:
+    var(--shadow-card),
+    inset 0 0 0 2px rgba(198, 164, 111, 0.52),
+    0 0 16px rgba(38, 59, 50, 0.10);
+}
+
+.calendar-day--finale::before {
+  content: '';
+  position: absolute;
+  top: -15%;
+  left: -135%;
+  width: 65%;
+  height: 130%;
+  background: linear-gradient(
+    115deg,
+    transparent 20%,
+    rgba(198, 164, 111, 0.30) 50%,
+    transparent 80%
+  );
+  animation: finaleSheenSweep 7.2s var(--ease-editorial) infinite;
+  pointer-events: none;
+}
+
+@keyframes finaleSheenSweep {
+  0%, 60% {
+    left: -135%;
+  }
+  86%, 100% {
+    left: 145%;
+  }
+}
+
+.calendar-day--finale.calendar-day--locked {
+  opacity: 0.88;
+}
+
+.calendar-day__finale-spark {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--color-oro-champan) 0%, transparent 72%);
+  pointer-events: none;
+  animation: finaleOrbitPulse 4.6s ease-in-out infinite;
+}
+
+.calendar-day__finale-spark--a {
+  bottom: 10px;
+  left: 11px;
+}
+
+.calendar-day__finale-spark--b {
+  top: 24px;
+  right: 9px;
+  animation-delay: -2.2s;
+}
+
+@keyframes finaleOrbitPulse {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) scale(0.7);
+    opacity: 0.4;
+  }
+  50% {
+    transform: translate3d(0, -5px, 0) scale(1.35);
+    opacity: 1;
+  }
+}
+
+/* Destello de desbloqueo en vivo a las 00:00 */
+.calendar-day--unlocking {
+  animation: dayUnlockBurst var(--duration-special) var(--ease-editorial);
+}
+
+@keyframes dayUnlockBurst {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.07);
+    box-shadow: 0 0 34px rgba(198, 164, 111, 0.82);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.calendar-day__number {
+  font-family: var(--font-serif);
+  font-optical-sizing: none;
+  font-variation-settings: 'opsz' 16;
+  font-size: clamp(1.35rem, 2.3vw, 1.75rem);
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  color: inherit;
+}
+
+.calendar-day--today .calendar-day__number {
+  font-weight: 700;
+  color: var(--color-marfil);
+  text-shadow: 0 2px 10px rgba(41, 39, 36, 0.35);
+}
+
+.calendar-day__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 22px;
+  transition: transform var(--duration-normal) var(--ease-editorial);
+}
+
+.calendar-day--interactive:hover .calendar-day__icon {
+  transform: scale(1.16) translateY(-1px) rotate(-4deg);
+}
+
+.calendar-day__icon--pine {
+  color: var(--color-verde-noche);
+}
+
+.calendar-day__icon--burgundy {
+  color: var(--color-borgona);
+}
+
+.calendar-day__icon--christmas {
+  color: var(--color-borgona);
+  filter: drop-shadow(0 0 6px rgba(198, 164, 111, 0.62));
+  animation: christmasStarGlow 4.4s ease-in-out infinite alternate;
+}
+
+@keyframes christmasStarGlow {
+  0% {
+    transform: scale(0.97);
+    filter: drop-shadow(0 0 4px rgba(198, 164, 111, 0.42));
+  }
+  100% {
+    transform: scale(1.07);
+    filter: drop-shadow(0 0 10px rgba(198, 164, 111, 0.78));
+  }
+}
+
+.calendar-day--today .calendar-day__icon--christmas,
+.calendar-day--today .calendar-day__icon--finale {
+  color: var(--color-oro-champan);
+}
+
+.calendar-day__icon--finale {
+  color: var(--color-oro-champan);
+  filter: drop-shadow(0 1px 4px rgba(41, 39, 36, 0.22));
+  animation: finaleCrownFloat 4.8s ease-in-out infinite alternate;
+}
+
+@keyframes finaleCrownFloat {
+  0% {
+    transform: translateY(0) scale(0.98);
+  }
+  100% {
+    transform: translateY(-2px) scale(1.08);
+  }
+}
+
+.calendar-day__badge {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: var(--color-borgona);
+  color: var(--color-marfil);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 5px rgba(120, 52, 65, 0.28);
+  transition: transform var(--duration-fast) var(--ease-editorial);
+}
+
+.calendar-day--interactive:hover .calendar-day__badge {
+  transform: scale(1.1);
+}
+
+.calendar-day__badge--visited {
+  background-color: var(--color-verde-noche);
+}
+
+.calendar-day__mini-lock {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  color: var(--negro-calido-62);
+  display: inline-flex;
+}
+
+.calendar-day__milestone {
+  position: absolute;
+  top: 6px;
+  left: 8px;
+  font-family: var(--font-sans);
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-borgona);
+  opacity: 0.85;
+}
+
+.calendar-day--today .calendar-day__milestone {
+  color: var(--color-oro-champan);
+}
+
+@media (max-width: 767px) {
+  .calendar-day {
+    aspect-ratio: 1 / 1.02;
+    padding: 0.55rem 0.35rem;
+    gap: 0.25rem;
+  }
+
+  .calendar-day__number {
+    font-size: clamp(1.28rem, 5.2vw, 1.55rem);
+  }
+
+  .calendar-day__badge {
+    top: 5px;
+    right: 5px;
+    width: 18px;
+    height: 18px;
+  }
+
+  .calendar-day__milestone {
+    font-size: 0.52rem;
+    top: 5px;
+    left: 6px;
+  }
+}
