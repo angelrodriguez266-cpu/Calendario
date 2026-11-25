@@ -556,15 +556,9 @@ export async function handleAppRequest(
 
 export const server = http.createServer(handleAppRequest);
 
-if (process.env.NODE_ENV !== 'test' && !process.env.VERCEL) {
-  server.listen(PORT, () => {
-    const configured = isServerAuthConfigured();
-    const bogotaNow = getBogotaClockSnapshot();
-    console.log(`\n✦ María y Ángel: una Navidad juntos`);
-    console.log(`  Servidor activo en: http://localhost:${PORT}`);
-    console.log(`  Hora oficial (America/Bogota): ${bogotaNow.bogotaIso}`);
-    console.log(
-      `  Autenticación configurada: ${configured ? 'Sí (HttpOnly + scrypt)' : 'Pendiente (.env.local)'}\n`
-    );
-  });
+export default async function handler(
+  req: IncomingMessage,
+  res: ServerResponse
+): Promise<void> {
+  await handleAppRequest(req, res);
 }

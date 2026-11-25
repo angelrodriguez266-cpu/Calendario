@@ -1962,21 +1962,11 @@ async function handleAppRequest(req, res) {
   }
 }
 var server = http.createServer(handleAppRequest);
-if (process.env.NODE_ENV !== "test" && !process.env.VERCEL) {
-  server.listen(PORT, () => {
-    const configured = isServerAuthConfigured();
-    const bogotaNow = getBogotaClockSnapshot();
-    console.log(`
-\u2726 Mar\xEDa y \xC1ngel: una Navidad juntos`);
-    console.log(`  Servidor activo en: http://localhost:${PORT}`);
-    console.log(`  Hora oficial (America/Bogota): ${bogotaNow.bogotaIso}`);
-    console.log(
-      `  Autenticaci\xF3n configurada: ${configured ? "S\xED (HttpOnly + scrypt)" : "Pendiente (.env.local)"}
-`
-    );
-  });
+async function handler(req, res) {
+  await handleAppRequest(req, res);
 }
 export {
+  handler as default,
   handleAppRequest,
   server
 };
