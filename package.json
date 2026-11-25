@@ -5,11 +5,18 @@
   "type": "module",
   "description": "María y Ángel: una Navidad juntos — Calendario de Adviento digital privado (Diciembre 2026)",
   "engines": {
-    "node": ">=22.6.0"
+    "node": ">=20.0.0"
   },
   "scripts": {
     "dev": "node --watch --env-file-if-exists=.env.local src/server/server.ts",
+    "build": "esbuild api/index.ts --bundle --platform=node --target=node20 --format=esm --outfile=api/index.js",
     "start": "node --env-file-if-exists=.env.local src/server/server.ts",
     "hash-password": "node scripts/hash-password.mjs"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@vercel/node": "^32.0.0",
+    "esbuild": "^0.27.0",
+    "typescript": "^5.0.0"
   }
 }

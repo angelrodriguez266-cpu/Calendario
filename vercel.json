@@ -1,8 +1,26 @@
 {
   "version": 2,
+  "buildCommand": "npm run build",
+  "outputDirectory": "public",
   "rewrites": [
     {
-      "source": "/(.*)",
+      "source": "/api/(.*)",
+      "destination": "/api/index"
+    },
+    {
+      "source": "/admin(.*)",
+      "destination": "/api/index"
+    },
+    {
+      "source": "/calendario(.*)",
+      "destination": "/api/index"
+    },
+    {
+      "source": "/private-content/(.*)",
+      "destination": "/api/index"
+    },
+    {
+      "source": "/",
       "destination": "/api/index"
     }
   ]
